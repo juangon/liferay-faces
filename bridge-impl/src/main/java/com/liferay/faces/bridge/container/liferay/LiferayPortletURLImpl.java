@@ -13,8 +13,11 @@
  */
 package com.liferay.faces.bridge.container.liferay;
 
+import java.util.Map;
+
 import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
+import javax.portlet.PortletSecurityException;
 import javax.portlet.WindowState;
 import javax.portlet.WindowStateException;
 
@@ -47,8 +50,27 @@ public abstract class LiferayPortletURLImpl extends LiferayBaseURLImpl implement
 		return toStringValue;
 	}
 
+	@Override
 	protected void resetToString() {
 		this.toStringValue = null;
+	}
+
+	@Override
+	public void setParameter(String name, String value) {
+		super.setParameter(name, value);
+		resetToString();
+	}
+
+	@Override
+	public void setParameter(String name, String[] values) {
+		super.setParameter(name, values);
+		resetToString();
+	}
+
+	@Override
+	public void setParameters(Map<String, String[]> parameters) {
+		super.setParameters(parameters);
+		resetToString();
 	}
 
 	public PortletMode getPortletMode() {
@@ -57,6 +79,18 @@ public abstract class LiferayPortletURLImpl extends LiferayBaseURLImpl implement
 
 	public void setPortletMode(PortletMode portletMode) throws PortletModeException {
 		this.portletMode = portletMode;
+		resetToString();
+	}
+
+	@Override
+	public void setProperty(String key, String value) {
+		super.setProperty(key, value);
+		resetToString();
+	}
+
+	@Override
+	public void setSecure(boolean secure) throws PortletSecurityException {
+		super.setSecure(secure);
 		resetToString();
 	}
 
