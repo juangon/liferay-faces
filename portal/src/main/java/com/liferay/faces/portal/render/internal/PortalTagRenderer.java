@@ -14,6 +14,8 @@
 package com.liferay.faces.portal.render.internal;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Iterator;
 
 import javax.el.ELContext;
 import javax.faces.component.UIComponent;
@@ -26,8 +28,10 @@ import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 
+import com.liferay.faces.util.component.Taggeable;
 import com.liferay.faces.util.jsp.PageContextAdapter;
 import com.liferay.faces.util.jsp.StringJspWriter;
 import com.liferay.faces.util.lang.StringPool;
@@ -53,7 +57,7 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 	 * Copy attributes from the JSF component to the JSP tag that are not common between JSF and JSP.
 	 */
 	public abstract void copyNonFrameworkAttributes(U u, T t);
-
+	
 	/**
 	 * Creates a new instance of the JSP tag.
 	 */
@@ -62,6 +66,53 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 	@Override
 	public void encodeBegin(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
+		populateTag(facesContext, uiComponent);		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void encodeChildren(FacesContext facesContext, UIComponent uiComponent) throws IOException {
+		
+		Taggeable<T> parent = null;
+		
+		if (uiComponent instanceof Taggeable) {						
+			 parent = (Taggeable<T>) uiComponent;
+		}
+			
+			if (uiComponent.getChildCount() > 0) {
+	        	Iterator<UIComponent> kids = uiComponent.getChildren().iterator();
+	        	while (kids.hasNext()) {
+	        	    UIComponent kid = kids.next();
+	        	    if (kid instanceof Taggeable) {
+	        	    	Taggeable<T> taggeable = (Taggeable<T>) kid;
+	        	    	if (parent != null) {
+	        	    		taggeable.setParentTag(parent.getTag());
+	        	    	}
+	        	    }
+	        	    
+	        	   ResponseWriter originalWriter = facesContext.getResponseWriter();
+	        	    StringWriter writer = new StringWriter();
+
+	        	    try {
+	        	    	facesContext.setResponseWriter(facesContext.getRenderKit().createResponseWriter(writer, "text/html", "UTF-8"));
+	        	        kid.encodeAll(facesContext);
+	        	    } finally {
+	        	        if (originalWriter != null) {
+	        	        	facesContext.setResponseWriter(originalWriter);
+	        	        }
+	        	    }
+
+	        	    String output = writer.toString();
+	        	    facesContext.getAttributes().put(getClass().getName()+"_children", output);
+	        	}
+	      }			
+	}
+	
+	@Override
+	public void encodeEnd(FacesContext facesContext, UIComponent uiComponent) throws IOException {
+
+		ResponseWriter responseWriter = facesContext.getResponseWriter();
+		
 		try {
 			String preChildMarkup = getTagOutput(facesContext, uiComponent);
 			System.err.println("---------------");
@@ -81,19 +132,21 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 				}
 			}
 
-			ResponseWriter responseWriter = facesContext.getResponseWriter();
+			
 			responseWriter.write(preChildMarkup);
 		}
 		catch (JspException e) {
 			throw new IOException(e);
-		}
-	}
-
-	@Override
-	public void encodeEnd(FacesContext facesContext, UIComponent uiComponent) throws IOException {
-
-		ResponseWriter responseWriter = facesContext.getResponseWriter();
+		}		
+		
 		String fqcn = getClass().getName();
+		
+		String childrenMarkup = (String) facesContext.getAttributes().remove(fqcn +"_children");
+		
+		if (childrenMarkup != null) {
+			responseWriter.write(childrenMarkup);
+		}
+		
 		String postChildMarkup = (String) facesContext.getAttributes().remove(fqcn);
 
 		if (postChildMarkup != null) {
@@ -105,12 +158,15 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 		return null;
 	}
 
+	
+	@SuppressWarnings("unchecked")
 	protected String getTagOutput(FacesContext facesContext, UIComponent uiComponent) throws JspException {
 
 		// Setup the Facelet -> JSP tag adapter.
 		ExternalContext externalContext = facesContext.getExternalContext();
 		PortletRequest portletRequest = (PortletRequest) externalContext.getRequest();
 		HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(portletRequest);
+		httpServletRequest = PortalUtil.getOriginalServletRequest(httpServletRequest);
 		PortletResponse portletResponse = (PortletResponse) externalContext.getResponse();
 		HttpServletResponse httpServletResponse = PortalUtil.getHttpServletResponse(portletResponse);
 		ELContext elContext = facesContext.getELContext();
@@ -119,13 +175,23 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 				elContext, stringJspWriter);
 
 		// Create an instance of the JSP tag that corresponds to the JSF component.
-		T tag = newTag();
+		T tag = null;
+		
+		if (uiComponent instanceof Taggeable) {	
+			Taggeable<T> currentTag = (Taggeable<T>) uiComponent;			
+			tag = currentTag.getTag();		
+		}
+		else
+		{
+			tag = newTag();
+		}
+				
 		tag.setPageContext(pageContextAdapter);
 		copyFrameworkAttributes(cast(uiComponent), tag);
 		copyNonFrameworkAttributes(cast(uiComponent), tag);
 
 		// Invoke the JSP tag lifecycle directly (rather than using the tag from a JSP).
-		tag.doStartTag();
+		tag.doStartTag();		
 		tag.doEndTag();
 
 		String tagOutput = pageContextAdapter.getOut().toString();
@@ -135,5 +201,18 @@ public abstract class PortalTagRenderer<U extends UIComponent, T extends Tag> ex
 		}
 
 		return tagOutput;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void populateTag(FacesContext facesContext, UIComponent uiComponent) {
+		
+		T tag = null;
+		
+		if (uiComponent instanceof Taggeable) {	
+			Taggeable<T> currentTag = (Taggeable<T>) uiComponent;
+			currentTag.setTag(newTag());
+			tag = currentTag.getTag();									
+			tag.setParent(currentTag.getParentTag());			
+		}
 	}
 }

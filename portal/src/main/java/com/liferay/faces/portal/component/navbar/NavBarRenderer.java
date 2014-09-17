@@ -17,7 +17,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.render.FacesRenderer;
 
 import com.liferay.faces.portal.render.internal.PortalTagRenderer;
-
 import com.liferay.taglib.aui.NavBarTag;
 
 
@@ -35,8 +34,7 @@ public class NavBarRenderer extends PortalTagRenderer<NavBar, NavBarTag> {
 	}
 
 	@Override
-	public void copyFrameworkAttributes(NavBar navBar, NavBarTag navBarTag) {
-		navBarTag.setId(navBar.getClientId());
+	public void copyFrameworkAttributes(NavBar navBar, NavBarTag navBarTag) {		
 		navBarTag.setCssClass(navBar.getStyleClass());
 	}
 
@@ -65,4 +63,9 @@ public class NavBarRenderer extends PortalTagRenderer<NavBar, NavBarTag> {
 		//J+
 		return "</div>";
 	}
+	
+	@Override
+	public boolean getRendersChildren() {
+		return true;
+	}	
 }

@@ -20,7 +20,7 @@ import javax.faces.component.FacesComponent;
  * @author  Neil Griffin
  */
 @FacesComponent(value = NavBar.COMPONENT_TYPE)
-public class NavBar extends NavBarBase {
+public class NavBar extends NavBarBase{
 
 	// Public Constants
 	public static final String COMPONENT_TYPE = "com.liferay.faces.portal.component.navbar.NavBar";

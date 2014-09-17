@@ -14,6 +14,10 @@
 package com.liferay.faces.portal.component.nav;
 
 import javax.faces.component.FacesComponent;
+import javax.servlet.jsp.tagext.Tag;
+
+import com.liferay.faces.util.component.Taggeable;
+import com.liferay.taglib.aui.NavTag;
 
 
 /**
@@ -24,8 +28,8 @@ public class Nav extends NavBase {
 
 	// Public Constants
 	public static final String COMPONENT_TYPE = "com.liferay.faces.portal.component.nav.Nav";
-	public static final String RENDERER_TYPE = "com.liferay.faces.portal.component.nav.NavRenderer";
-
+	public static final String RENDERER_TYPE = "com.liferay.faces.portal.component.nav.NavRenderer";	
+	
 	public Nav() {
 		super();
 		setRendererType(RENDERER_TYPE);
