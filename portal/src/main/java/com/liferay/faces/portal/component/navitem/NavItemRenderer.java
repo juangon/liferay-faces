@@ -64,4 +64,9 @@ public class NavItemRenderer extends PortalTagRenderer<NavItem, NavItemTag> {
 	public String getChildInsertionMarker() {
 		return "</li>";
 	}
+	
+	@Override
+	public boolean getRendersChildren() {
+		return true;
+	}
 }
