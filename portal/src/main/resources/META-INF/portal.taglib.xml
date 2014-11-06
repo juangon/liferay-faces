@@ -189,16 +189,16 @@ java.lang.Object)</method-signature>
 			<renderer-type>com.liferay.faces.portal.component.inputsearch.InputSearchRenderer</renderer-type>
 		</component>
 		<attribute>
-			<description><![CDATA[TODO.]]></description>
-			<name>actionListener</name>
-			<required>false</required>
-			<type>javax.faces.event.ActionListener</type>
-		</attribute>
-		<attribute>
-			<description><![CDATA[TODO.]]></description>
+			<description><![CDATA[.]]></description>
 			<name>action</name>
 			<required>false</required>
-			<type>javax.el.MethodExpression</type>
+			<type>javax.el.MethodExpression</type>			
+		</attribute>
+		<attribute>
+			<description><![CDATA[.]]></description>
+			<name>actionListener</name>
+			<required>false</required>
+			<type>javax.el.MethodExpression</type>			
 		</attribute>
 		<attribute>
 			<description><![CDATA[TODO.]]></description>

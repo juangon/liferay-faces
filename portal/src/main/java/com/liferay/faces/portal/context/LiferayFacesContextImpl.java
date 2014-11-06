@@ -52,10 +52,10 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
+import com.liferay.faces.portal.context.internal.MessageContextPortalImpl;
 import com.liferay.faces.portal.security.AuthorizationException;
 import com.liferay.faces.util.context.FacesContextHelper;
 import com.liferay.faces.util.context.MessageContext;
-
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.model.Group;
@@ -89,7 +89,7 @@ public class LiferayFacesContextImpl extends LiferayFacesContext implements Seri
 		setInstance(this);
 
 		MessageContext messageContext = MessageContext.getInstance();
-		MessageContext.setInstance(new MessageContextLiferayImpl(messageContext));
+		MessageContext.setInstance(new MessageContextPortalImpl(messageContext));
 	}
 
 	/**

@@ -92,8 +92,9 @@ public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends 
 			}
 
 			// Encode the output of the JSP tag up until the point at which children should be inserted.
-			ResponseWriter responseWriter = facesContext.getResponseWriter();
-			responseWriter.write(preChildMarkup);
+			StringBuilder markup = new StringBuilder(3);
+			
+			markup.append(preChildMarkup);
 
 			// Ensure that scripts are rendered at the bottom of the page.
 			String scripts = portalTagOutput.getScripts();
@@ -107,13 +108,17 @@ public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends 
 			String childrenMarkup = bufferedChildrenMarkupWriter.toString();
 
 			if (childrenMarkup != null) {
-				responseWriter.write(childrenMarkup);
+				markup.append(childrenMarkup);
 			}
 
 			// Encode the output of the JSP tag that is to appear after the children.
 			if (postChildMarkup != null) {
-				responseWriter.write(postChildMarkup);
+				markup.append(postChildMarkup);
 			}
+
+			ResponseWriter responseWriter = facesContext.getResponseWriter();
+			StringBuilder processedMarkup = getMarkup(uiComponent, markup);
+			responseWriter.write(processedMarkup.toString());
 		}
 		catch (JspException e) {
 			throw new IOException(e);
@@ -128,5 +133,9 @@ public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends 
 	@Override
 	public boolean getRendersChildren() {
 		return true;
+	}
+	
+	protected StringBuilder getMarkup(UIComponent uiComponent, StringBuilder markup) {
+		return markup;
 	}
 }
