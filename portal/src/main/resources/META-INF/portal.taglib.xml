@@ -187,6 +187,7 @@ java.lang.Object)</method-signature>
 		<component>
 			<component-type>com.liferay.faces.portal.component.inputsearch.InputSearch</component-type>
 			<renderer-type>com.liferay.faces.portal.component.inputsearch.InputSearchRenderer</renderer-type>
+			<handler-class>com.liferay.faces.portal.component.inputsearch.InputSearchHandler</handler-class>
 		</component>
 		<attribute>
 			<description><![CDATA[.]]></description>

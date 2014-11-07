@@ -16,21 +16,15 @@ package com.liferay.faces.portal.component.inputsearch;
 
 import javax.annotation.Generated;
 import javax.el.MethodExpression;
-import javax.faces.component.ActionSource2;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.el.MethodBinding;
-import javax.faces.event.ActionListener;
 
-import com.liferay.faces.portal.component.inputsearch.InputSearchCommandBase.InputSearchCommandPropertyKeys;
 import com.liferay.faces.util.component.Styleable;
 
 /**
- * @author	Neil Griffin
  * @author Juan Gonzalez
  */
 @Generated(value = "com.liferay.alloy.tools.builder.FacesBuilder")
-public abstract class InputSearchBase  extends UIInput{
+public abstract class InputSearchBase  extends UIInput implements Styleable{
 
 	// Protected Enumerations
 	protected enum InputSearchPropertyKeys {
@@ -101,36 +95,21 @@ public abstract class InputSearchBase  extends UIInput{
 		getStateHelper().put(InputSearchPropertyKeys.title, title);
 	}	
 	
-	public javax.el.MethodExpression getActionListener() {
-		return (javax.el.MethodExpression) getStateHelper().eval(InputSearchPropertyKeys.actionListener, null);
-	}
-	
-	/*public String getActionListener() {
-		return (String) getStateHelper().eval(InputSearchCommandPropertyKeys.actionListener, null);
-	}*/
+	public MethodExpression getActionListener() {
+		return (MethodExpression) getStateHelper().eval(InputSearchPropertyKeys.actionListener, null);
+	}	
 
-	public void setActionListener(javax.el.MethodExpression actionListener) {
+	public void setActionListener(MethodExpression actionListener) {
 		getStateHelper().put(InputSearchPropertyKeys.actionListener, actionListener);
 	}
 
-	/*public void setActionListener(String actionListener) {
-		getStateHelper().put(InputSearchCommandPropertyKeys.actionListener, actionListener);
-	}*/
-
-	public javax.el.MethodExpression getAction() {
-		return (javax.el.MethodExpression) getStateHelper().eval(InputSearchPropertyKeys.action);
+	public MethodExpression getAction() {
+		return (MethodExpression) getStateHelper().eval(InputSearchPropertyKeys.action);
 	}
 	
-	/*public String getAction() {
-		return (String) getStateHelper().eval(InputSearchCommandPropertyKeys.action, null);
-	}*/
-
-	public void setAction(javax.el.MethodExpression action) {
+	public void setAction(MethodExpression action) {
 		getStateHelper().put(InputSearchPropertyKeys.action, action);
 	}
-	
-	/*public void setAction(String action) {
-		getStateHelper().put(InputSearchCommandPropertyKeys.action, action);
-	}*/
+
 }
 //J+

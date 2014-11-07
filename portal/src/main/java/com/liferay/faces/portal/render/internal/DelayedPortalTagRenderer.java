@@ -26,8 +26,11 @@ import javax.faces.render.Renderer;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
+import com.liferay.faces.portal.component.inputrichtext.InputRichText;
 import com.liferay.faces.portal.context.LiferayFacesContext;
 import com.liferay.faces.util.lang.StringPool;
+import com.liferay.faces.util.logging.Logger;
+import com.liferay.faces.util.logging.LoggerFactory;
 
 
 /**
@@ -39,6 +42,9 @@ import com.liferay.faces.util.lang.StringPool;
  */
 public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends Tag> extends PortalTagRenderer<U, T> {
 
+	// Logger
+	private static final Logger logger = LoggerFactory.getLogger(DelayedPortalTagRenderer.class);
+		
 	@Override
 	public void encodeBegin(FacesContext facesContext, UIComponent uiComponent) throws IOException {
 
@@ -117,10 +123,12 @@ public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends 
 			}
 
 			ResponseWriter responseWriter = facesContext.getResponseWriter();
+			logger.debug("Markup before transformation:{0}", markup);
 			StringBuilder processedMarkup = getMarkup(uiComponent, markup);
+			logger.debug("Markup after transformation:{0}", processedMarkup);
 			responseWriter.write(processedMarkup.toString());
 		}
-		catch (JspException e) {
+		catch (Exception e) {
 			throw new IOException(e);
 		}
 	}
@@ -135,7 +143,7 @@ public abstract class DelayedPortalTagRenderer<U extends UIComponent, T extends 
 		return true;
 	}
 	
-	protected StringBuilder getMarkup(UIComponent uiComponent, StringBuilder markup) {
+	protected StringBuilder getMarkup(UIComponent uiComponent, StringBuilder markup) throws Exception{
 		return markup;
 	}
 }

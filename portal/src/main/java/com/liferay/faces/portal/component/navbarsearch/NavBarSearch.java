@@ -15,10 +15,9 @@ package com.liferay.faces.portal.component.navbarsearch;
 
 import javax.faces.component.FacesComponent;
 
-import com.liferay.faces.util.component.ComponentUtil;
 
 /**
- * @author	Neil Griffin
+ * @author  Juan Gonzalez
  */
 @FacesComponent(value = NavBarSearch.COMPONENT_TYPE)
 public class NavBarSearch extends NavBarSearchBase {
@@ -26,7 +25,7 @@ public class NavBarSearch extends NavBarSearchBase {
 	// Public Constants
 	public static final String COMPONENT_TYPE = "com.liferay.faces.portal.component.navbarsearch.NavBarSearch";
 	public static final String RENDERER_TYPE = "com.liferay.faces.portal.component.navbarsearch.NavBarSearchRenderer";
-	
+
 	public NavBarSearch() {
 		super();
 		setRendererType(RENDERER_TYPE);
