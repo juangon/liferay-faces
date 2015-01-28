@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:component xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:cc="http://java.sun.com/jsf/composite"
-	xmlns:aui="http://liferay.com/faces/aui" xmlns:aui-cc="http://liferay.com/faces/aui-cc"
+	xmlns:alloy="http://liferay.com/faces/alloy" xmlns:aui-cc="http://liferay.com/faces/aui-cc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vdldoc="http://vdldoc.org/vdldoc"
 	xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/2002/08/xhtml/xhtml1-transitional.xsd http://vdldoc.org/vdldoc https://raw.githubusercontent.com/omnifaces/vdldoc/master/src/main/resources/org/omnifaces/vdldoc/resources/vdldoc-cc.xhtml.xsd">
 
@@ -21,7 +21,7 @@
 
 	<cc:implementation>
 
-		<aui:field inlineMessage="#{cc.attrs.inlineMessage}" label="#{cc.attrs.label}" type="menu">
+		<alloy:field inlineMessage="#{cc.attrs.inlineMessage}" label="#{cc.attrs.label}" type="menu">
 <ui:remove><!-- 		aui_deprecated.css: field-input --></ui:remove>
 <ui:remove><!-- 		aui-field-input-select not found in 6.2 --></ui:remove>
 <ui:remove><!-- 		aui-field-input-menu found in 6.2 javascript TODO --></ui:remove>
@@ -32,7 +32,7 @@
 			<c:if test="#{cc.attrs.inlineMessage}">
 				<aui-cc:message for="s1" style="display: inline;" />
 			</c:if>
-		</aui:field>
+		</alloy:field>
 
 	</cc:implementation>
 
